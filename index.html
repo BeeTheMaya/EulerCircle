@@ -7,8 +7,9 @@
   <style>
     .grid {
       display: grid;
-      grid-template-columns: repeat(10, 30px);
+      grid-template-columns: repeat(20, 30px);
       grid-auto-rows: 30px;
+      overflow-x: auto; /* Ensure horizontal scrolling if needed */
     }
     .cell {
       display: flex;
@@ -29,8 +30,8 @@
 
   <script>
     // Initialize grid dimensions
-    const rows = 20; // You can increase this for a larger grid
-    const cols = 20;
+    const rows = 20; // Updated to 20
+    const cols = 20; // Updated to 20
 
     // Starting positions of the checkers
     const initialPositions = [

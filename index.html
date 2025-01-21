@@ -1,116 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Checker Simulation</title>
-  <style>
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(20, 30px);
-      grid-auto-rows: 30px;
-      overflow-x: auto; /* Ensure horizontal scrolling if needed */
-    }
-    .cell {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid #ccc;
-    }
-    input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experiment Hub</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        header h1 {
+            margin: 0;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            width: 100%;
+            max-width: 1200px;
+            box-sizing: border-box;
+        }
+        .tile {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .tile:hover {
+            transform: scale(1.05);
+        }
+        .tile img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .tile h2 {
+            margin: 10px 0;
+            font-size: 1.2rem;
+            color: #333;
+        }
+        .tile a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            padding: 10px;
+        }
+    </style>
 </head>
 <body>
-  <h1>Checker Simulation</h1>
-  <p>Click on a checkbox to attempt to move the checker according to the rules.</p>
-  <div class="grid" id="grid"></div>
-
-  <script>
-    // Initialize grid dimensions
-    const rows = 20; // Updated to 20
-    const cols = 20; // Updated to 20
-
-    // Starting positions of the checkers
-    const initialPositions = [
-      [0, 0], [1, 0], [0, 1]
-    ];
-
-    // Create the grid
-    const grid = document.getElementById('grid');
-    const gridState = Array.from({ length: rows }, () => Array(cols).fill(false));
-    const validMoves = Array.from({ length: rows }, () => Array(cols).fill(false));
-
-    // Initialize the grid state with starting positions
-    initialPositions.forEach(([x, y]) => {
-      gridState[x][y] = true;
-    });
-
-    // Render the grid
-    function renderGrid() {
-      grid.innerHTML = '';
-      for (let i = 0; i < rows; i++) {
-        for (let j = 0; j < cols; j++) {
-          const cell = document.createElement('div');
-          cell.className = 'cell';
-          const checkbox = document.createElement('input');
-          checkbox.type = 'checkbox';
-          checkbox.checked = gridState[i][j];
-          checkbox.disabled = !validMoves[i][j]; // Only enable checkboxes with valid moves
-
-          // Add click event for custom logic
-          checkbox.addEventListener('click', () => handleMove(i, j));
-
-          cell.appendChild(checkbox);
-          grid.appendChild(cell);
-        }
-      }
-    }
-
-    // Handle the movement logic
-    function handleMove(x, y) {
-      if (!gridState[x][y]) return; // No checker here
-
-      // Calculate target positions
-      const target1 = [x + 1, y];
-      const target2 = [x, y + 1];
-
-      // Check if target positions are within bounds and empty
-      if (
-        target1[0] < rows && target1[1] < cols && !gridState[target1[0]][target1[1]] &&
-        target2[0] < rows && target2[1] < cols && !gridState[target2[0]][target2[1]]
-      ) {
-        // Perform the move
-        gridState[x][y] = false;
-        gridState[target1[0]][target1[1]] = true;
-        gridState[target2[0]][target2[1]] = true;
-        updateValidMoves();
-        renderGrid();
-      }
-    }
-
-    // Update the valid moves based on the grid state
-    function updateValidMoves() {
-      for (let i = 0; i < rows; i++) {
-        for (let j = 0; j < cols; j++) {
-          if (gridState[i][j]) {
-            const target1 = [i + 1, j];
-            const target2 = [i, j + 1];
-            validMoves[i][j] =
-              target1[0] < rows && target1[1] < cols && !gridState[target1[0]][target1[1]] &&
-              target2[0] < rows && target2[1] < cols && !gridState[target2[0]][target2[1]];
-          } else {
-            validMoves[i][j] = false;
-          }
-        }
-      }
-    }
-
-    // Initial render
-    updateValidMoves();
-    renderGrid();
-  </script>
+    <header>
+        <h1>Experiment Hub</h1>
+        <p>Explore the experiments by clicking on the tiles below</p>
+    </header>
+    <div class="container">
+        <div class="tile">
+            <a href="experiment1.html">
+                <img src="experiment1.jpg" alt="Experiment 1">
+                <h2>Experiment 1</h2>
+            </a>
+        </div>
+        <div class="tile">
+            <a href="experiment2.html">
+                <img src="experiment2.jpg" alt="Experiment 2">
+                <h2>Experiment 2</h2>
+            </a>
+        </div>
+        <div class="tile">
+            <a href="experiment3.html">
+                <img src="experiment3.jpg" alt="Experiment 3">
+                <h2>Experiment 3</h2>
+            </a>
+        </div>
+        <!-- Add more tiles as needed -->
+    </div>
 </body>
 </html>

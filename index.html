@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checker Simulation</title>
+  <style>
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(10, 30px);
+      grid-auto-rows: 30px;
+    }
+    .cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #ccc;
+    }
+    input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Checker Simulation</h1>
+  <p>Click on a checkbox to attempt to move the checker according to the rules.</p>
+  <div class="grid" id="grid"></div>
+
+  <script>
+    // Initialize grid dimensions
+    const rows = 20; // You can increase this for a larger grid
+    const cols = 20;
+
+    // Starting positions of the checkers
+    const initialPositions = [
+      [0, 0], [1, 0], [0, 1]
+    ];
+
+    // Create the grid
+    const grid = document.getElementById('grid');
+    const gridState = Array.from({ length: rows }, () => Array(cols).fill(false));
+    const validMoves = Array.from({ length: rows }, () => Array(cols).fill(false));
+
+    // Initialize the grid state with starting positions
+    initialPositions.forEach(([x, y]) => {
+      gridState[x][y] = true;
+    });
+
+    // Render the grid
+    function renderGrid() {
+      grid.innerHTML = '';
+      for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+          const cell = document.createElement('div');
+          cell.className = 'cell';
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.checked = gridState[i][j];
+          checkbox.disabled = !validMoves[i][j]; // Only enable checkboxes with valid moves
+
+          // Add click event for custom logic
+          checkbox.addEventListener('click', () => handleMove(i, j));
+
+          cell.appendChild(checkbox);
+          grid.appendChild(cell);
+        }
+      }
+    }
+
+    // Handle the movement logic
+    function handleMove(x, y) {
+      if (!gridState[x][y]) return; // No checker here
+
+      // Calculate target positions
+      const target1 = [x + 1, y];
+      const target2 = [x, y + 1];
+
+      // Check if target positions are within bounds and empty
+      if (
+        target1[0] < rows && target1[1] < cols && !gridState[target1[0]][target1[1]] &&
+        target2[0] < rows && target2[1] < cols && !gridState[target2[0]][target2[1]]
+      ) {
+        // Perform the move
+        gridState[x][y] = false;
+        gridState[target1[0]][target1[1]] = true;
+        gridState[target2[0]][target2[1]] = true;
+        updateValidMoves();
+        renderGrid();
+      }
+    }
+
+    // Update the valid moves based on the grid state
+    function updateValidMoves() {
+      for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+          if (gridState[i][j]) {
+            const target1 = [i + 1, j];
+            const target2 = [i, j + 1];
+            validMoves[i][j] =
+              target1[0] < rows && target1[1] < cols && !gridState[target1[0]][target1[1]] &&
+              target2[0] < rows && target2[1] < cols && !gridState[target2[0]][target2[1]];
+          } else {
+            validMoves[i][j] = false;
+          }
+        }
+      }
+    }
+
+    // Initial render
+    updateValidMoves();
+    renderGrid();
+  </script>
+</body>
+</html>
